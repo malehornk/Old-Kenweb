@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>down for repairs</title>
+    <style>
+                        body { 
+            font-family: Arial; 
+            color: #91ff00; 
+            padding: 20px;
+            background-image: url("{{ url_for('static', filename='images/bg.gif') }}");
+            background-repeat: repeat; /* or no-repeat */
+        }
+        form { margin-bottom: 20px; }
+        button { padding: 5px 10px; margin-left: 5px; }
+    </style>
+       <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+</head>
+<body>
+    <!-- cant wait to see how long this takes -->
+
+    <h1>this part of kenweb is down for maintenance! check in a week or two to see if its done!</h1>
+        <img src="{{ url_for('static', filename='images/work.png') }}" alt="GET BACK TO WORK"
+    style="width:250px; height:auto;" >
+</form>
+
+<br>
+<a href="/">home</a>
+<a href="https://www.youtube.com/watch?v=WIRK_pGdIdA">chip</a>
+</body>
+</html>
+
+
