@@ -32,7 +32,7 @@ def save_entries(entries):
 # stupod fucking routes i hate them
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("maint.html")
 @app.route("/rules")
 def rules():
     return render_template("rules.html")
