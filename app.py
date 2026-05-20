@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # --- Config ---
 # Set these as environment variables on Render
-OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "https://6fca-2601-98d-c082-7e60-c57e-3275-1f8-b562.ngrok-free.app ")
+OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "https://6fca-2601-98d-c082-7e60-c57e-3275-1f8-b562.ngrok-free.app")
 API_KEY      = os.environ.get("KENBOT_API_KEY", "KENNY2012may30!")
 
 # --- Helper: forward request to Optiplex ---
