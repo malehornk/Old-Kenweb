@@ -39,7 +39,7 @@ CHAT_PAGE = """<!DOCTYPE html>
 <style>
 body {
     background-color: #008080;
-    background-image: url('/static/bg.gif');
+    background-image: url('/static/images/bg.gif');
     font-family: "MS Sans Serif", Arial, sans-serif;
     font-size: 11px;
     margin: 0;
