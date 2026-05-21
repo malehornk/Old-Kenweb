@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, HTTPBasicAuth
 import urllib.request
 import json
 import os
@@ -34,6 +34,20 @@ def forward(path, method="GET", body=None):
 
 
 # --- Routes ---
+
+
+auth = HTTPBasicAuth()
+
+USERS = {
+    "ken": "your-password-here"
+}
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in USERS and USERS[username] == password:
+        return username
+    return None
+
 
 @app.route("/")
 def index():
