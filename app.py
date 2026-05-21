@@ -1,0 +1,69 @@
+from flask import Flask, request, jsonify, render_template
+import urllib.request
+import json
+import os
+
+app = Flask(__name__)
+
+# --- Config ---
+OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "http://10.0.0.40:6501")
+API_KEY      = os.environ.get("KENBOT_API_KEY", "your-secret-api-key-here")
+
+# --- Helper: forward request to Optiplex ---
+def forward(path, method="GET", body=None):
+    url = OPTIPLEX_URL + path
+    headers = {
+        "Content-Type": "application/json",
+        "X-API-Key": API_KEY
+    }
+    print(f"Forwarding {method} to {url}")
+    try:
+        if method == "POST":
+            data = json.dumps(body).encode("utf-8")
+            req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+        else:
+            req = urllib.request.Request(url, headers=headers, method="GET")
+
+        with urllib.request.urlopen(req, timeout=900) as resp:
+            result = json.loads(resp.read().decode("utf-8"))
+            print(f"Got response: {result}")
+            return result, resp.status
+    except Exception as e:
+        print(f"Forward error: {e}")
+        return {"error": str(e)}, 500
+
+
+# --- Routes ---
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.get_json(force=True)
+    result, status = forward("/chat", method="POST", body=data)
+    return jsonify(result), status
+
+
+@app.route("/reset", methods=["GET"])
+def reset():
+    result, status = forward("/reset")
+    return jsonify(result), status
+
+
+@app.route("/ping", methods=["GET"])
+def ping():
+    result, status = forward("/ping")
+    return jsonify(result), status
+
+
+@app.route("/version", methods=["GET"])
+def version():
+    result, status = forward("/version")
+    return jsonify(result), status
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
