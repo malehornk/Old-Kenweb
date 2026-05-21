@@ -13,6 +13,7 @@ API_KEY      = os.environ.get("KENBOT_API_KEY", "KENNY2012may30!")
 
 USERS = {
    "kenbot": "KENBOT6501"
+   "bluestarinthesky": "Ybkk0s!"
 }
 
 @auth.verify_password
