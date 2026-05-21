@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>KenBot - Ken Technologies Inc.</title>
+<style>
+body {
+    background-color: #008080;
+    font-family: "MS Sans Serif", Arial, sans-serif;
+    font-size: 11px;
+    margin: 0;
+    padding: 20px;
+}
+
+.window {
+    background: #d4d0c8;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    width: 500px;
+    margin: 0 auto;
+}
+
+.titlebar {
+    background: #000080;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 3px 5px;
+    font-size: 11px;
+    display: block;
+}
+
+.window-body {
+    padding: 8px;
+}
+
+.chatbox {
+    width: 100%;
+    height: 300px;
+    background: #ffffff;
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    font-family: "Fixedsys", "Courier New", monospace;
+    font-size: 11px;
+    overflow-y: scroll;
+    padding: 4px;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.input-row {
+    margin-top: 6px;
+    display: block;
+}
+
+.inputbox {
+    width: 370px;
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background: #ffffff;
+    font-family: "MS Sans Serif", Arial, sans-serif;
+    font-size: 11px;
+    padding: 2px;
+}
+
+.btn {
+    background: #d4d0c8;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    font-family: "MS Sans Serif", Arial, sans-serif;
+    font-size: 11px;
+    padding: 2px 10px;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.btn:active {
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+.statusbar {
+    background: #d4d0c8;
+    border-top: 1px solid #808080;
+    margin-top: 6px;
+    padding: 2px 4px;
+    font-size: 10px;
+    color: #000000;
+}
+</style>
+</head>
+<body>
+
+<div class="window">
+  <span class="titlebar">KenBot - Ken Technologies Inc.</span>
+  <div class="window-body">
+    <textarea class="chatbox" id="chatbox" readonly>KenBot Web Client
+(c) Ken Technologies Inc. 1982-2001. All rights reserved.
+================================
+Type a message and press Send or Enter.
+
+</textarea>
+    <div class="input-row">
+      <input class="inputbox" type="text" id="inputbox" maxlength="500">
+      <input class="btn" type="button" value="Send" id="btnSend">
+      <input class="btn" type="button" value="Reset" id="btnReset">
+    </div>
+    <div class="statusbar" id="status">Ready.</div>
+  </div>
+</div>
+
+<script type="text/javascript">
+function appendChat(text) {
+    var box = document.getElementById('chatbox');
+    box.value = box.value + text + '\n';
+    box.scrollTop = box.scrollHeight;
+}
+
+function setStatus(text) {
+    document.getElementById('status').innerHTML = text;
+}
+
+function doSend() {
+    var input = document.getElementById('inputbox');
+    var msg = input.value;
+    if (msg == null || msg == '') return;
+
+    appendChat('You: ' + msg);
+    input.value = '';
+    setStatus('Waiting for KenBot...');
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/chat', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState != 4) return;
+        if (xhr.status == 200) {
+            try {
+                var parsed = JSON.parse(xhr.responseText);
+                var response = parsed.response;
+                if (response) {
+                    appendChat('KenBot: ' + response);
+                    setStatus('Connected.');
+                } else {
+                    appendChat('KenBot: [Could not parse response]');
+                    setStatus('Parse error.');
+                }
+            } catch(e) {
+                appendChat('KenBot: [Could not parse response]');
+                setStatus('Parse error: ' + e);
+            }
+        } else {
+            appendChat('KenBot: [No response - check connection]');
+            setStatus('Error: HTTP ' + xhr.status);
+        }
+    };
+    xhr.onerror = function() {
+        appendChat('KenBot: [Connection failed]');
+        setStatus('Connection failed.');
+    };
+    try {
+        var body = JSON.stringify({message: msg});
+        xhr.send(body);
+    } catch(e) {
+        appendChat('KenBot: [Connection failed]');
+        setStatus('Connection failed: ' + e);
+    }
+}
+
+function doReset() {
+    setStatus('Resetting memory...');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/reset', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState != 4) return;
+        if (xhr.status == 200) {
+            appendChat('*** Memory cleared. ***');
+            setStatus('Memory cleared.');
+        } else {
+            setStatus('Reset failed.');
+        }
+    };
+    xhr.onerror = function() {
+        setStatus('Reset failed.');
+    };
+    xhr.send();
+}
+
+document.getElementById('btnSend').onclick = doSend;
+document.getElementById('btnReset').onclick = doReset;
+
+document.getElementById('inputbox').onkeypress = function(e) {
+    var key = e ? e.which : window.event.keyCode;
+    if (key == 13) { doSend(); }
+}
+</script>
+
+</body>
+</html>
