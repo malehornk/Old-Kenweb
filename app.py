@@ -12,7 +12,7 @@ OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "https://195b-2601-98d-c082-7e60-c
 API_KEY      = os.environ.get("KENBOT_API_KEY", "KENNY2012may30!")
 
 USERS = {
-   "kenbot": "KENBOT6501"
+   "kenbot": "KENBOT6501",
    "bluestarinthesky": "Ybkk0s!"
 }
 
