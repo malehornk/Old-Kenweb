@@ -226,6 +226,7 @@ document.getElementById('inputbox').onkeypress = function(e) {
     if (key == 13) { doSend(); }
 }
 </script>
+<a href="https//:yenweb.onrender.com">home<a>
 
 </body>
 </html>"""
