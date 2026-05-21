@@ -8,7 +8,7 @@ app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 # --- Config ---
-OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "http://your-home-ip:5000")
+OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "https://195b-2601-98d-c082-7e60-c57e-3275-1f8-b562.ngrok-free.app")
 API_KEY      = os.environ.get("KENBOT_API_KEY", "your-secret-api-key-here")
 
 USERS = {
