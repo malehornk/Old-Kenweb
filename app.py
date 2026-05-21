@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # --- Config ---
-OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "http://10.0.0.40:6501")
+OPTIPLEX_URL = os.environ.get("OPTIPLEX_URL", "https://8c18-2601-98d-c082-7e60-c57e-3275-1f8-b562.ngrok-free.app")
 API_KEY      = os.environ.get("KENBOT_API_KEY", "your-secret-api-key-here")
 
 # --- Helper: forward request to Optiplex ---
