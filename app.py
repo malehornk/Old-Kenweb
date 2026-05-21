@@ -39,7 +39,7 @@ def forward(path, method="GET", body=None):
 auth = HTTPBasicAuth()
 
 USERS = {
-    "ken": "your-password-here"
+    "ken": "test"
 }
 
 @auth.verify_password
